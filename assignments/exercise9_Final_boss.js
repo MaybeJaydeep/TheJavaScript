@@ -10,3 +10,17 @@ const totalInventoryValue = inventory
   .reduce((sum, value) => sum + value, 0);
 
 console.log(totalInventoryValue);
+
+/*
+const totalInventoryValue = inventory.reduce(
+  (sum, { price, stock }) => stock > 0 ? sum + price * stock : sum,
+  0
+);
+
+
+const totalInventoryValue = inventory.reduce((sum, p) => {
+  sum += (p.price * p.stock)
+  return sum
+  }, 0)
+);
+*/

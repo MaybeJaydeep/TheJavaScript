@@ -16,3 +16,16 @@ switch (role) {
   default:
     console.log("Invalid role");
 }
+/*
+const roleAccess = {
+  ADMIN: "Full access",
+  MANAGER: "Moderate access",
+  USER: "Limited access",
+  SUPPORT: "Ticket handling access",
+  GUEST: "Read-only access"
+};
+
+let role = "MANAGER";
+
+console.log(roleAccess[role] ?? "Invalid role");
+*/
