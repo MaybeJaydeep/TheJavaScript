@@ -1,0 +1,107 @@
+<!--
+
+Problem 3: Dynamic Product List with Filter and Sort
+Objective
+Create a dynamic product list UI with filtering and sorting capabilities.
+Requirements
+Render products from a JavaScript array
+
+
+Implement:
+
+
+Filter by price
+
+
+Sort by product name
+
+
+Update DOM dynamically on button click
+
+
+Render HTML using template literals
+
+
+Attach event listeners properly
+
+
+Constraints
+No page reloads
+
+
+Use only map, filter, and sort for data manipulation
+
+
+Expected Outcome
+Product list updates instantly
+
+
+Filters and sorting work correctly
+
+
+Clean, readable DOM updates
+
+
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Product Filter & Sort</title>
+</head>
+
+<body>
+
+    <h2>Products</h2>
+
+    <button id="filter">Price ≤ 500</button>
+    <button id="sort">Sort by Name</button>
+    <button id="reset">Reset</button>
+
+    <div id="products"></div>
+
+    <script>
+        const productData = [
+            { id: 1, name: "Laptop", price: 800 },
+            { id: 2, name: "Phone", price: 400 },
+            { id: 3, name: "Headphones", price: 150 },
+            { id: 4, name: "Keyboard", price: 300 }
+        ];
+
+        let currentProducts = [...productData];
+
+        // Render products
+        const renderProducts = list => {
+            products.innerHTML = list.map(p => `
+    <div>
+      <b>${p.name}</b> - ₹${p.price}
+    </div>
+  `).join("");
+        };
+
+        // Filter products
+        filter.addEventListener("click", () => {
+            currentProducts = productData.filter(p => p.price <= 500);
+            renderProducts(currentProducts);
+        });
+
+        // Sort products
+        sort.addEventListener("click", () => {
+            currentProducts = [...currentProducts]
+                .sort((a, b) => a.name.localeCompare(b.name));
+            renderProducts(currentProducts);
+        });
+
+        // Reset list
+        reset.addEventListener("click", () => {
+            currentProducts = [...productData];
+            renderProducts(currentProducts);
+        });
+
+        renderProducts(currentProducts);
+    </script>
+
+</body>
+
+</html>
