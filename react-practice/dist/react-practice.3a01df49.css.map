@@ -1,0 +1,1 @@
+{"mappings":"AAAA;;;;;;AAMA","sources":["style.css"],"sourcesContent":["*{\r\n    margin: 0;\r\n    padding: 0;\r\n    background-color: #959595;\r\n}\r\n\r\n.heading{\r\n    color: black;\r\n    text-decoration: underline;\r\n}"],"names":[],"version":3,"file":"react-practice.3a01df49.css.map","sourceRoot":"/__parcel_source_root/"}

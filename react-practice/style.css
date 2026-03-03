@@ -1,0 +1,10 @@
+*{
+    margin: 0;
+    padding: 0;
+    background-color: #959595;
+}
+
+.heading{
+    color: black;
+    text-decoration: underline;
+}
