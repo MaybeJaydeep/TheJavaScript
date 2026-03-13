@@ -1,4 +1,4 @@
-import { useAuth } from ".../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { useNavigate, useLocation, Navigate } from "react-router-dom";
 
 const Login = () => {
@@ -8,16 +8,14 @@ const Login = () => {
 
   const from = location.state?.from?.pathname || "/dashboard";
 
-  if (isAuthenticated) return <Navigate to="/dashboard" replace />;
+  if (isAuthenticated) return <Navigate to={from} replace />;
 
   const handleLoginUser = () => {
     login("user");
-    navigate(from, { replace: true });
   };
 
   const handleLoginAdmin = () => {
     login("admin");
-    navigate(from, { replace: true });
   };
 
   return (
