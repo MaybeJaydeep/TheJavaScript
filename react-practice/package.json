@@ -1,10 +1,14 @@
 {
   "scripts": {
-    "start" : "parcel index.html",
-    "build" : "parcel build index.html"
+    "start": "parcel index.html",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "devDependencies": {
-    "parcel": "^2.16.4"
+    "@vitejs/plugin-react": "^5.1.4",
+    "parcel": "^2.16.4",
+    "vite": "^7.3.1"
   },
   "dependencies": {
     "react": "^19.2.4",
