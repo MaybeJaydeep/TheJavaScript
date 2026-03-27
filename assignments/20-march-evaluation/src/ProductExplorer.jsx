@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useProducts } from "./hooks/useProducts";
+import { useCart } from "./context/CartContext";
 
-  const ProductExplorer = () => {
-
+const ProductExplorer = () => {
   const {
     products,
     loading,
@@ -18,12 +18,40 @@ import { useProducts } from "./hooks/useProducts";
     page,
     setPage,
     total,
-    limit
-  } = useProducts()
+    limit,
+  } = useProducts();
+
+  const { cart, addToCart, removeFromCart, clearCart } = useCart();
 
   return (
     <div>
       {loading ? <h2>Loading...</h2> : null}
+
+      {/* Cart Section */}
+      <div style={{ padding: "20px", border: "1px solid #ccc", marginBottom: "20px", borderRadius: "8px" }}>
+        <h2>Shopping Cart</h2>
+        {cart.length === 0 ? (
+          <p>Your cart is empty.</p>
+        ) : (
+          <>
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              {cart.map((item) => (
+                <li key={item.id} style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px", borderBottom: "1px solid #eee", paddingBottom: "10px" }}>
+                  <span>{item.title} (x{item.qty})</span>
+                  <span>
+                    Price: ${item.price * item.qty}
+                    <button style={{ marginLeft: "10px" }} onClick={() => removeFromCart(item.id)}>Remove</button>
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div style={{ display: "flex", justifyContent: "space-between", fontWeight: "bold" }}>
+              <span>Total: ${cart.reduce((total, item) => total + item.price * item.qty, 0).toFixed(2)}</span>
+              <button onClick={clearCart}>Clear Cart</button>
+            </div>
+          </>
+        )}
+      </div>
 
       <input
         type="text"
@@ -91,6 +119,7 @@ import { useProducts } from "./hooks/useProducts";
             <p>Price: ${p.price}</p>
             <p>Rating: {p.rating}</p>
             <p>Stock: {p.stock}</p>
+            <button onClick={() => addToCart(p)}>Add To Cart</button>
           </div>
         ))}
       </div>
