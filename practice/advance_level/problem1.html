@@ -1,0 +1,208 @@
+<!--
+
+Problem 1: Async Shopping Cart with LocalStorage
+Objective
+Build a simple shopping cart application that fetches product data asynchronously and persists cart data across browser refreshes.
+Requirements
+Fetch product data using Fetch API from:
+ https://jsonplaceholder.typicode.com/photos?_limit=10
+
+
+Use async/await with proper error handling
+
+
+Store cart data in localStorage as a deep-copied array of objects
+
+
+Use spread operator and structuredClone
+
+
+Implement the following using arrow functions:
+
+
+addToCart
+
+
+removeFromCart (use object destructuring)
+
+
+calculateTotal (use reduce)
+
+
+Implement event delegation for a dynamically rendered product list
+
+
+Add a search input to filter products
+
+
+Use string manipulation (split, join)
+
+
+Update the DOM using template literals
+
+
+Handle “out of stock” scenarios using Promise chaining
+
+
+Display errors using innerHTML
+
+
+Persist cart data across page refreshes
+
+
+Add a Clear Cart button
+
+
+Use rest operator to merge state updates
+
+
+Constraints
+No page reloads
+
+
+No external libraries
+
+
+Expected Outcome
+Products load asynchronously
+
+
+Cart updates in real time
+
+
+Cart data persists after refresh
+
+
+Total price updates automatically
+
+
+Graceful error handling and clean UI
+
+
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Cart App</title>
+</head>
+
+<body>
+
+    <h2>Products</h2>
+    <input id="search" placeholder="Search..." />
+    <div id="products"></div>
+
+    <h2>Cart</h2>
+    <div id="cart"></div>
+    <p>Total: ₹ <span id="total">0</span></p>
+    <button id="clear">Clear Cart</button>
+
+    <div id="error"></div>
+
+    <script>
+        const API = "https://jsonplaceholder.typicode.com/photos?_limit=10";
+
+        const App = {
+            products: [],
+            cart: JSON.parse(localStorage.getItem("cart")) || [],
+
+            save() {
+                localStorage.setItem("cart",
+                    JSON.stringify(structuredClone(this.cart))
+                );
+            },
+
+            total() {
+                return this.cart.reduce((s, p) => s + p.price, 0);
+            },
+
+            renderCart() {
+                cart.innerHTML = this.cart.map(p => `
+      <div>
+        ${p.title.split(" ")[0]} ₹${p.price}
+        <button data-remove="${p.id}">Remove</button>
+      </div>
+    `).join("");
+
+                total.textContent = this.total();
+            },
+
+            add(id) {
+                const item = this.products.find(p => p.id == id);
+
+                Promise.resolve(item)
+                    .then(p => {
+                        if (Math.random() < 0.2) throw "Out of stock";
+                        this.cart = [...this.cart, structuredClone(p)];
+                        this.save();
+                        this.renderCart();
+                    })
+                    .catch(e => error.innerHTML = e);
+            },
+
+            remove(id) {
+                this.cart = this.cart.filter(({ id: pid }) => pid != id);
+                this.save();
+                this.renderCart();
+            },
+
+            renderProducts(list) {
+                products.innerHTML = list.map(p => `
+      <div>
+        <img src="${p.thumbnailUrl}" width="50">
+        ${p.title.split(" ").slice(0, 2).join(" ")}
+        ₹${p.price}
+        <button data-add="${p.id}">Add</button>
+      </div>
+    `).join("");
+            },
+
+            async load() {
+                try {
+                    const res = await fetch(API);
+                    const data = await res.json();
+
+                    this.products = data.map(p => ({
+                        ...p,
+                        price: Math.floor(Math.random() * 500) + 100
+                    }));
+
+                    this.renderProducts(this.products);
+                } catch {
+                    error.innerHTML = "Loading failed";
+                }
+            }
+        };
+
+        // Event delegation
+        document.body.addEventListener("click", e => {
+            if (e.target.dataset.add) App.add(e.target.dataset.add);
+            if (e.target.dataset.remove) App.remove(e.target.dataset.remove);
+        });
+
+        // Search filter
+        search.oninput = e => {
+            const term = e.target.value.toLowerCase();
+            App.renderProducts(
+                App.products.filter(p =>
+                    p.title.toLowerCase().includes(term)
+                )
+            );
+        };
+
+        // Clear cart
+        clear.onclick = () => {
+            App.cart = [];
+            App.save();
+            App.renderCart();
+        };
+
+        App.load();
+        App.renderCart();
+    </script>
+
+</body>
+
+</html>

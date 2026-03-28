@@ -1,0 +1,120 @@
+<!--
+
+Problem 4: Persistent Notes Application
+Objective
+Build a notes application where data persists after refresh.
+Requirements
+Add, edit, and delete notes
+
+
+Save notes to localStorage
+
+
+Load notes on page load
+
+
+Serialize and deserialize data using JSON.stringify / JSON.parse
+
+
+Handle edge cases:
+
+
+Empty storage
+
+
+Corrupt or invalid stored data
+
+
+Expected Outcome
+Notes persist across refreshes
+
+
+App does not crash with invalid storage data
+
+
+Smooth user experience
+
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Notes App</title>
+</head>
+
+<body>
+
+    <h2>Notes App</h2>
+
+    <input id="noteInput" placeholder="Write a note..." />
+    <button id="addBtn">Add Note</button>
+
+    <div id="notes"></div>
+
+    <script>
+        let notes = [];
+
+        // ---------- Load Notes Safely --------------------------------------
+        const loadNotes = () => {
+            try {
+                const stored = localStorage.getItem("notes");
+                notes = stored ? JSON.parse(stored) : [];
+
+                // Handle corrupt data
+                if (!Array.isArray(notes)) notes = [];
+            } catch {
+                notes = [];
+            }
+        };
+
+        // ---------- Save Notes ----------------------------------------------
+        const saveNotes = () => {
+            localStorage.setItem("notes", JSON.stringify(notes));
+        };
+
+        // ---------- Render ---------------------------------------------------
+        const renderNotes = () => {
+            notesDiv.innerHTML = notes.map((note, i) => `
+    <div>
+      <input value="${note}" data-edit="${i}" />
+      <button data-delete="${i}">Delete</button>
+    </div>
+  `).join("");
+        };
+
+        // ---------- Add -------------------------------------------------------
+        addBtn.onclick = () => {
+            const text = noteInput.value.trim();
+            if (!text) return;
+
+            notes.push(text);
+            noteInput.value = "";
+            saveNotes();
+            renderNotes();
+        };
+
+        // ---------- Event Delegation -------------------------------------------
+        document.body.addEventListener("input", e => {
+            if (e.target.dataset.edit !== undefined) {
+                notes[e.target.dataset.edit] = e.target.value;
+                saveNotes();
+            }
+        });
+
+        document.body.addEventListener("click", e => {
+            if (e.target.dataset.delete !== undefined) {
+                notes.splice(e.target.dataset.delete, 1);
+                saveNotes();
+                renderNotes();
+            }
+        });
+
+        // ---------- Init ----------------------------------------------------------
+        loadNotes();
+        renderNotes();
+    </script>
+
+</body>
+
+</html>
