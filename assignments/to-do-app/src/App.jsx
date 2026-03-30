@@ -97,7 +97,7 @@ const App = () => {
           <span>Show Completed Only</span>
         </label>
 
-        <button className="btn btn-danger" onClick={handleClearAll}>
+        <button className="btn" onClick={handleClearAll}>
           Clear All
         </button>
       </div>
